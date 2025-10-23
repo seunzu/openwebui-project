@@ -1,0 +1,20 @@
+cluster.name: "observability-cluster"
+network.host: 0.0.0.0
+
+node.name: "elasticsearch-node-1"
+node.roles: [master, data, ingest]
+
+discovery.type: single-node
+
+bootstrap.memory_lock: false
+
+http.port: 9200
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+
+xpack.security.enabled: ${SECURITY_ENABLED}
+xpack.security.enrollment.enabled: ${SECURITY_ENABLED}
+xpack.security.http.ssl.enabled: ${SECURITY_ENABLED}
+
+action.auto_create_index: true
+action.destructive_requires_name: true
