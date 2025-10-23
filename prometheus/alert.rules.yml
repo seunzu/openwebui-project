@@ -1,0 +1,32 @@
+groups:
+  - name: basic_alerts
+    rules:
+      # 서비스 다운
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "서비스가 다운되었습니다"
+          description: "{{ $labels.job }} 서비스가 1분 이상 응답하지 않습니다"
+
+      # 높은 메모리 사용률
+      - alert: HighMemoryUsage
+        expr: (process_resident_memory_bytes / 1024 / 1024) > 1024
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "메모리 사용량이 높습니다"
+          description: "{{ $labels.job }} 메모리 사용량이 1GB를 초과했습니다"
+
+      # HTTP 에러율 증가
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "HTTP 5xx 에러율이 높습니다"
+          description: "{{ $labels.job }} 5xx 에러율이 증가했습니다"

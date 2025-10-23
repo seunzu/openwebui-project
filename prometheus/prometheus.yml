@@ -1,0 +1,33 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#             - alertmanager:9093
+
+rule_files:
+  - "/etc/prometheus/alert.rules.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          service: "prometheus"
+
+  - job_name: "elasticsearch"
+    static_configs:
+      - targets: ["elasticsearch:9200"]
+        labels:
+          service: "elasticsearch"
+    metrics_path: "/_prometheus/metrics"
+
+  # 실제 애플리케이션으로 교체
+  # - job_name: "application"
+  #   static_configs:
+  #     - targets: [] # ['app:8080'] 형식으로 추가
+  #       labels:
+  #         service: "application"
