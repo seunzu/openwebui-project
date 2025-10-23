@@ -1,0 +1,28 @@
+filebeat.inputs:
+  # ver1. Docker 기반
+  - type: container
+    paths:
+      - "/var/lib/docker/containers/*/*.log"
+    processors:
+      - add_docker_metadata:
+          host: "unix:///var/run/docker.sock"
+
+  # ver2. 애플리케이션 기반
+  # -> 멀티 앱이면 각각 작성
+  # - type: log
+  #   enabled: true
+  #   paths:
+  #     - /app/logs/*.log
+  #   fields:
+  #     app: myapp
+  #     env: prod
+
+output.logstash:
+  hosts: ["logstash:5044"]
+  indices:
+    - index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+
+setup.kibana:
+  host: "kibana:5601"
+
+logging.level: info
